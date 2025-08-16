@@ -1,10 +1,8 @@
 {
-  "functions": {
-    "api/rewrite.js": {
-      "memory": 1024,
-      "maxDuration": 10
-    }
-  },
+  "version": 2,
+  "builds": [
+    { "src": "api/rewrite.js", "use": "@vercel/node" }
+  ],
   "rewrites": [
     {
       "source": "/rewrite",
