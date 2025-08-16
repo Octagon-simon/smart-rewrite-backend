@@ -6,7 +6,7 @@
   "rewrites": [
     {
       "source": "/rewrite",
-      "destination": "/api/rewrite"
+      "destination": "/api/rewrite.js"
     }
   ]
 }
