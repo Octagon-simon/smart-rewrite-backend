@@ -10,5 +10,8 @@
   "dependencies": {
     "ai": "^4.0.0",
     "@ai-sdk/xai": "^1.0.0"
+  },
+  "engines": {
+    "node": "20.x"
   }
 }
