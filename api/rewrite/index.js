@@ -54,7 +54,7 @@ async function getDeviceSecret(deviceId) {
 }
 
 async function saveDeviceSecret(deviceId, secret) {
-  await redis.set(`device:${deviceId}:secret`, secret, "EX", 60 * 60 * 24 * 365) // 1 year
+  await redis.set(`device:${deviceId}:secret`, secret, "EX", 60 * 60 * 24 * 90) // 90 days incase of extension reinstall
 }
 
 async function isReplay(deviceId, nonce) {
@@ -101,7 +101,7 @@ async function verifyRequest(req, res) {
   }
 
   // recompute signature
-  const payload = `${req.method}|${process.env.SERVER_URL + req.url}|${timestamp}|${nonce}|${deviceId}`;
+  const payload = `${req.method}|${req.url}|${timestamp}|${nonce}|${deviceId}`;
   const expected = crypto.createHash("sha256").update(payload + deviceSecret).digest("hex")
 
   if (expected !== signature) {
