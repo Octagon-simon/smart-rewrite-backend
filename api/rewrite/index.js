@@ -3,30 +3,34 @@ import { xai } from "@ai-sdk/xai"
 
 async function rewriteTextWithAI(text, translateToFrench = false) {
   try {
+    const prompt = translateToFrench
+      ? `Please rewrite the following text professionally and then translate it to French: "${text}"`
+      : `Please rewrite the following text professionally: "${text}"`
+
     const result = await generateText({
       model: xai("grok-4", {
-        apiKey: process.env.XAI_API_KEY, // Automatically available from Vercel Grok integration
+        apiKey: process.env.XAI_API_KEY,
       }),
-      prompt: { text: text, translateToFrench: translateToFrench || false }, // Pass text and optional translation flag
-      system: `You are a professional writing assistant. Rewrite the given text to make it more professional, polished, and appropriate for business communication while maintaining the original meaning and intent. If the 'translateToFrench' parameter is true, translate the rewritten text into French while preserving the professional tone and intent.
+      prompt: prompt,
+      system: `You are a professional writing assistant. Rewrite the given text to make it more professional, polished, and appropriate for business communication while maintaining the original meaning and intent.
 
 Guidelines:
-- Use formal language and proper grammar in the rewritten text
+- Use formal language and proper grammar
 - Replace casual expressions with professional alternatives
 - Maintain the original tone and message
 - Keep the same length approximately
 - Do not add extra content or change the core message
-- If translating to French, use accurate and natural French language with proper grammar and syntax
-- Return only the rewritten (and translated, if applicable) text without explanations`,
-    });
+- If asked to translate to French, first rewrite professionally in English, then provide an accurate French translation with proper grammar and natural language
+- Return only the final rewritten text (in French if translation was requested) without explanations`,
+    })
 
     return result.text
   } catch (error) {
     console.error("Error with AI rewriting:", error)
-    // Fallback to basic rewriting if AI fails
     return basicRewrite(text)
   }
 }
+
 
 function basicRewrite(text) {
   return text
