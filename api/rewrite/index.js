@@ -1,23 +1,24 @@
 import { generateText } from "ai"
 import { xai } from "@ai-sdk/xai"
 
-async function rewriteTextWithAI(text) {
+async function rewriteTextWithAI(text, translateToFrench = false) {
   try {
     const result = await generateText({
       model: xai("grok-4", {
         apiKey: process.env.XAI_API_KEY, // Automatically available from Vercel Grok integration
       }),
-      prompt: text,
-      system: `You are a professional writing assistant. Rewrite the given text to make it more professional, polished, and appropriate for business communication while maintaining the original meaning and intent. 
+      prompt: { text: text, translateToFrench: translateToFrench || false }, // Pass text and optional translation flag
+      system: `You are a professional writing assistant. Rewrite the given text to make it more professional, polished, and appropriate for business communication while maintaining the original meaning and intent. If the 'translateToFrench' parameter is true, translate the rewritten text into French while preserving the professional tone and intent.
 
 Guidelines:
-- Use formal language and proper grammar
+- Use formal language and proper grammar in the rewritten text
 - Replace casual expressions with professional alternatives
 - Maintain the original tone and message
 - Keep the same length approximately
 - Do not add extra content or change the core message
-- Return only the rewritten text without explanations`,
-    })
+- If translating to French, use accurate and natural French language with proper grammar and syntax
+- Return only the rewritten (and translated, if applicable) text without explanations`,
+    });
 
     return result.text
   } catch (error) {
@@ -55,7 +56,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { content } = req.body
+    const { content, translateToFrench } = req.body
 
     if (!content) {
       return res.status(400).json({
@@ -66,7 +67,7 @@ export default async function handler(req, res) {
 
     console.log("Received rewrite request for:", content.substring(0, 50) + "...")
 
-    const rewrittenText = await rewriteTextWithAI(content)
+    const rewrittenText = await rewriteTextWithAI(content, translateToFrench)
 
     console.log("Rewritten text:", rewrittenText.substring(0, 50) + "...")
 
