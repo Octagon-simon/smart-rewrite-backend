@@ -67,12 +67,12 @@ async function isReplay(deviceId, nonce) {
 
 async function verifyRequest(req, res) {
   const {
-    "X-Device-Id": deviceId,
-    "X-Timestamp": timestamp,
-    "X-Nonce": nonce,
-    "X-Signature": signature,
-    // "X-Extension-Id": extensionId,//will use on prod
-    "X-Device-Secret": maybeSecret, //used on first registration
+    "x-device-id": deviceId,
+    "x-timestamp": timestamp,
+    "x-nonce": nonce,
+    "x-signature": signature,
+    // "x-extension-id": extensionId,//will use on prod
+    "x-device-secret": maybeSecret, //used on first registration
   } = req.headers
 
   if (!deviceId || !timestamp || !nonce || !signature) {
