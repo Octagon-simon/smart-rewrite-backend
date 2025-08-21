@@ -8,8 +8,9 @@
     "build": "echo 'No build step required for Vercel functions'"
   },
   "dependencies": {
+    "@ai-sdk/xai": "^1.0.0",
     "ai": "^4.0.0",
-    "@ai-sdk/xai": "^1.0.0"
+    "ioredis": "^5.7.0"
   },
   "engines": {
     "node": "20.x"
