@@ -8,8 +8,8 @@ const redis = new Redis(process.env.REDIS_URL)
 async function rewriteTextWithAI(text, translateToFrench = false) {
   try {
     const prompt = translateToFrench
-      ? `Please rewrite the following text professionally and then translate it: If the text is in English, translate to French. Text: "${text}"`
-      : `Please rewrite the following text professionally and then translate it: If the text is not in English, translate it to English: "${text}"`
+      ? `Please rewrite the following text professionally and then translate it to French: "${text}"`
+      : `Please rewrite the following text professionally: "${text}"`
 
     const result = await generateText({
       model: xai("grok-4", {
