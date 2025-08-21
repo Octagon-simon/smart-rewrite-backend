@@ -101,7 +101,8 @@ async function verifyRequest(req, res) {
   }
 
   // recompute signature
-  const payload = `${req.method}|${req.url}|${timestamp}|${nonce}|${deviceId}`
+  const payload = `${req.method}|${req.url}|${timestamp}|${nonce}|${deviceId}`;
+  console.log(`${req.method}|${req.url}|${timestamp}|${nonce}|${deviceId}`);
   const expected = crypto.createHash("sha256").update(payload + deviceSecret).digest("hex")
 
   if (expected !== signature) {
